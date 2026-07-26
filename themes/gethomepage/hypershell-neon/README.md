@@ -6,13 +6,7 @@ Tested with Homepage `v1.13.2`.
 
 ## Preview
 
-### Desktop
-
-![Hypershell Neon desktop preview](screenshots/desktop.png)
-
-### Hover glow
-
-![Hypershell Neon hover and glow preview](screenshots/hover-glow.gif)
+![Hypershell Neon desktop preview with active panel glow](screenshots/desktop.png)
 
 ## Features
 
