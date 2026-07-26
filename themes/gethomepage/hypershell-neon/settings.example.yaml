@@ -1,0 +1,14 @@
+# Merge these values into your existing Homepage settings.yaml.
+# Do not replace unrelated settings or layout configuration.
+
+theme: dark
+color: slate
+headerStyle: clean
+iconStyle: theme
+hideVersion: true
+statusStyle: basic
+cardBlur: sm
+
+# Optional, but matches the theme's mobile refresh-button placement.
+quicklaunch:
+  mobileButtonPosition: bottom-right

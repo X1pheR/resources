@@ -1,0 +1,474 @@
+/* Define the vibrant neon pink-blue brand palette and shared visual tokens. */
+:root {
+  --hs-neon-pink: 255 32 147;
+  --hs-neon-blue: 60 108 254;
+  --hs-neon-cyan: 34 211 238;
+  --hs-panel-surface: 5 8 22;
+  --hs-panel-elevated: 11 16 32;
+  --hs-text-primary: 226 232 240;
+  --hs-text-heading: 203 213 225;
+  --hs-text-secondary: 148 163 184;
+  --hs-text-muted: 100 116 139;
+  --hs-panel-radius: 0.375rem;
+  --hs-tab-active: linear-gradient(
+    135deg,
+    rgb(var(--hs-neon-pink) / 0.96),
+    rgb(var(--hs-neon-blue) / 0.92)
+  );
+  --hs-panel-edge: linear-gradient(
+    90deg,
+    rgb(var(--hs-neon-pink) / 0.88),
+    rgb(var(--hs-neon-blue) / 0.92),
+    rgb(var(--hs-neon-cyan) / 0.72)
+  );
+  --hs-panel-edge-strong: linear-gradient(
+    90deg,
+    rgb(var(--hs-neon-pink)),
+    rgb(var(--hs-neon-blue)),
+    rgb(var(--hs-neon-cyan) / 0.90)
+  );
+}
+
+/* Use a minimal neutral scrollbar on every actual scroll container. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color:
+    rgb(var(--hs-text-secondary) / 0.34)
+    transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  min-height: 3rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-color: rgb(var(--hs-text-secondary) / 0.28);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(var(--hs-text-secondary) / 0.44);
+}
+
+/* Show a hand cursor over tabs to make their clickability explicit. */
+:is([role="tab"], button[id^="headlessui-tab"]) {
+  cursor: pointer;
+}
+
+/* Show a hand cursor over enabled collapsible section headers. */
+:is(.services-group, .bookmark-group) button[id^="headlessui-disclosure-button-"]:not(:disabled) {
+  cursor: pointer;
+}
+
+/* Establish a calmer text hierarchy while preserving bright primary content and status colors. */
+:is(.service-name, .bookmark-name) {
+  color: rgb(var(--hs-text-primary) / 0.94) !important;
+}
+
+:is(.service-description, .bookmark-description),
+:is([role="tab"], button[id^="headlessui-tab"]):not([aria-selected="true"]),
+.widget-inner-text .secondary-text {
+  color: rgb(var(--hs-text-secondary) / 0.90) !important;
+}
+
+:is(.service-group-name, .bookmark-group-name) {
+  color: rgb(var(--hs-text-heading) / 0.92) !important;
+  transition: color 150ms ease;
+}
+
+/* Brighten collapsible section titles on hover or keyboard focus to reveal their interactivity. */
+@media (hover: hover) and (pointer: fine) {
+  :is(.services-group, .bookmark-group)
+  button[id^="headlessui-disclosure-button-"]:not(:disabled):hover
+  :is(.service-group-name, .bookmark-group-name) {
+    color: rgb(var(--hs-text-primary)) !important;
+  }
+}
+
+:is(.services-group, .bookmark-group)
+button[id^="headlessui-disclosure-button-"]:focus-visible
+:is(.service-group-name, .bookmark-group-name) {
+  color: rgb(var(--hs-text-primary)) !important;
+}
+
+/* Separate service widget values from their quieter uppercase labels. */
+.service-container:has(> .service-block) > .service-block > .font-thin {
+  color: rgb(var(--hs-text-secondary) / 0.94) !important;
+}
+
+.service-container:has(> .service-block) > .service-block > .font-bold {
+  color: rgb(var(--hs-text-muted) / 0.95) !important;
+}
+
+/* Tone down informational header widgets while preserving the full-color brand image. */
+.information-widget-greeting > span,
+.widget-inner-text .primary-text,
+span.tabular-nums.text-xl {
+  color: rgb(var(--hs-text-heading) / 0.88) !important;
+}
+
+.information-widget-resource :is(.text-theme-800, .resource-icon),
+.information-widget-icon {
+  color: rgb(var(--hs-text-secondary) / 0.90) !important;
+}
+
+/* Use clearly visible glass transparency for the tab bar without sacrificing label contrast. */
+[role="tablist"] {
+  background-color: rgb(var(--hs-panel-surface) / 0.38) !important;
+  backdrop-filter: blur(6px) saturate(115%);
+  -webkit-backdrop-filter: blur(6px) saturate(115%);
+}
+
+/* Highlight the active tab with the primary neon pink-to-electric-blue brand gradient. */
+:is([role="tab"], button[id^="headlessui-tab"])[aria-selected="true"] {
+  position: relative;
+  isolation: isolate;
+  color: white !important;
+  background: var(--hs-tab-active) !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.30) !important;
+}
+
+/* Reuse the active-tab fill as a blurred gradient glow instead of mixing solid shadows into purple. */
+:is([role="tab"], button[id^="headlessui-tab"])[aria-selected="true"]::before {
+  content: "";
+  position: absolute;
+  inset: -0.25rem;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--hs-tab-active);
+  filter: blur(9px);
+  opacity: 0.58;
+  pointer-events: none;
+}
+
+/* Increase horizontal spacing between service and bookmark panel columns on tablet and desktop. */
+@media (min-width: 769px) {
+  .services-group,
+  .bookmark-group:has(h2) {
+    padding-inline: 1rem;
+  }
+
+  /* Treat headerless groups containing nested service groups as transparent layout columns. */
+  .services-group:not(:has(h2)):has(.services-group) {
+    padding-inline: 0 !important;
+  }
+
+  .services-group:not(:has(h2)):has(.services-group) .services-group {
+    width: 100% !important;
+    margin-inline: 0 !important;
+  }
+}
+
+/* Add space below each titled section before the next section begins. */
+:is(.services-group, .bookmark-group:has(h2)) {
+  margin-bottom: 1.5rem;
+}
+
+/* Keep panel glow visible through Homepage's service, bookmark and disclosure layout wrappers. */
+:is(
+  .services-group,
+  .services-list,
+  .service,
+  .bookmark-group,
+  .bookmark-list,
+  .bookmark,
+  .services-group > [id^="headlessui-disclosure-panel-"],
+  .bookmark-group > [id^="headlessui-disclosure-panel-"]
+) {
+  overflow: visible !important;
+}
+
+/* Reveal collapsible sections with a smooth top-down roll while preserving external panel glows. */
+:is(.services-group, .bookmark-group) [id^="headlessui-disclosure-panel-"] {
+  transform-origin: top;
+  opacity: 0;
+  transform: translateY(-0.35rem);
+  clip-path: inset(0 -1.5rem 100% -1.5rem);
+  transition:
+    height 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 140ms ease-out,
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    clip-path 180ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  will-change: height, opacity, transform, clip-path;
+}
+
+:is(.services-group, .bookmark-group) [id^="headlessui-disclosure-panel-"][data-open] {
+  opacity: 1;
+  transform: translateY(0);
+  clip-path: inset(-1.5rem);
+}
+
+/* Match service and bookmark wrappers to the visible card height for a dedicated external glow layer. */
+.service {
+  --hs-panel-bottom-gap: 0.5rem;
+}
+
+.bookmark {
+  --hs-panel-bottom-gap: 0.75rem;
+}
+
+.bookmark.grid {
+  --hs-panel-bottom-gap: 0rem;
+}
+
+:is(.service, .bookmark) {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Blur painted gradient edges around each card without tinting the panel interior. */
+:is(.service, .bookmark)::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 var(--hs-panel-bottom-gap);
+  z-index: 0;
+  border-radius: var(--hs-panel-radius);
+  background:
+    var(--hs-panel-edge) top / 100% 3px no-repeat,
+    var(--hs-panel-edge) bottom / 100% 3px no-repeat,
+    linear-gradient(
+      rgb(var(--hs-neon-pink) / 0.88),
+      rgb(var(--hs-neon-pink) / 0.88)
+    ) left / 3px 100% no-repeat,
+    linear-gradient(
+      rgb(var(--hs-neon-cyan) / 0.72),
+      rgb(var(--hs-neon-cyan) / 0.72)
+    ) right / 3px 100% no-repeat;
+  filter: blur(6px);
+  opacity: 0.75;
+  pointer-events: none;
+  transition:
+    filter 150ms ease,
+    opacity 150ms ease;
+}
+
+/* Give service and bookmark panels one shared dark surface, border and clipping model. */
+:is(.service > .service-card, .bookmark > a) {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: var(--hs-panel-radius) !important;
+  border: 1px solid rgb(76 92 128 / 0.62) !important;
+  background-color: rgb(var(--hs-panel-surface) / 0.44) !important;
+  backdrop-filter: blur(4px) saturate(110%);
+  -webkit-backdrop-filter: blur(4px) saturate(110%);
+  box-shadow: none !important;
+  filter: none !important;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+/* Present service widget metrics as one rounded segmented row. */
+.service-container:has(> .service-block) {
+  display: flex;
+  align-items: stretch;
+  width: calc(100% - 0.5rem) !important;
+  margin: 0.25rem;
+  overflow: hidden;
+  border: 1px solid rgb(76 92 128 / 0.58);
+  border-radius: 0.5rem;
+  background-color: rgb(var(--hs-panel-elevated) / 0.34);
+}
+
+/* Remove the individual widget tiles and divide the shared row with subtle separators. */
+.service-container:has(> .service-block) > .service-block {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.service-container:has(> .service-block) > .service-block + .service-block {
+  border-inline-start: 1px solid rgb(var(--hs-neon-blue) / 0.24);
+}
+
+/* Draw one uninterrupted neon top edge above all internal panel content. */
+:is(.service > .service-card, .bookmark > a)::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  height: 2px;
+  background: var(--hs-panel-edge);
+  pointer-events: none;
+}
+
+/* Keep basic service status labels clear of the neon top edge. */
+.service-tags {
+  top: 0.25rem !important;
+}
+
+/* Strengthen the dedicated external glow and panel accents on pointer hover. */
+@media (hover: hover) and (pointer: fine) {
+  :is(.service, .bookmark):hover {
+    z-index: 2;
+  }
+
+  :is(.service, .bookmark):hover::before {
+    background:
+      var(--hs-panel-edge-strong) top / 100% 3px no-repeat,
+      var(--hs-panel-edge-strong) bottom / 100% 3px no-repeat,
+      linear-gradient(
+        rgb(var(--hs-neon-pink)),
+        rgb(var(--hs-neon-pink))
+      ) left / 3px 100% no-repeat,
+      linear-gradient(
+        rgb(var(--hs-neon-cyan) / 0.90),
+        rgb(var(--hs-neon-cyan) / 0.90)
+      ) right / 3px 100% no-repeat;
+    filter: blur(9px);
+    opacity: 0.95;
+  }
+
+  :is(.service:hover > .service-card, .bookmark:hover > a) {
+    border-color: transparent !important;
+    background:
+      linear-gradient(
+        rgb(var(--hs-panel-elevated) / 0.58),
+        rgb(var(--hs-panel-elevated) / 0.58)
+      ) padding-box,
+      var(--hs-panel-edge-strong) border-box !important;
+  }
+
+  :is(.service:hover > .service-card, .bookmark:hover > a)::before {
+    background: var(--hs-panel-edge-strong);
+  }
+}
+
+/* Apply the neon brand gradient to masked MDI section icons. */
+:is(.service-group-icon, .bookmark-group-icon) > div {
+  background: linear-gradient(
+    135deg,
+    rgb(var(--hs-neon-pink)),
+    rgb(var(--hs-neon-blue))
+  ) !important;
+}
+
+/* Add a subtle pink-blue glow around section icons. */
+:is(.service-group-icon, .bookmark-group-icon) {
+  filter:
+    drop-shadow(0 0 6px rgb(var(--hs-neon-blue) / 0.48))
+    drop-shadow(0 0 8px rgb(var(--hs-neon-pink) / 0.26));
+}
+
+/* Show an electric-blue outline for keyboard navigation without affecting pointer interaction. */
+:is(.service a, .bookmark a, [role="tab"], button[id^="headlessui-tab"]):focus-visible {
+  outline: 2px solid rgb(var(--hs-neon-blue) / 0.94);
+  outline-offset: 2px;
+}
+
+/* Float the refresh control above the page so the footer no longer creates document overflow. */
+#footer {
+  position: fixed !important;
+  inset: auto 1rem 1rem auto !important;
+  z-index: 40;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none;
+}
+
+/* Collapse Homepage's footer wrappers around the single visible refresh control. */
+#footer #style {
+  width: auto !important;
+  justify-content: flex-end !important;
+}
+
+/* Match the floating refresh control to Homepage's compact mobile Quick Launch button. */
+#revalidate {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin: 0 !important;
+  border-radius: 9999px !important;
+  background-color: rgb(30 41 59 / 0.88);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.24);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+#revalidate > svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  color: rgb(226 232 240 / 0.96) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #revalidate:hover {
+    background-color: rgb(51 65 85 / 0.94);
+    transform: scale(1.04);
+  }
+}
+
+/* Remove the unused version row when Homepage is configured to hide version information. */
+#version:empty {
+  display: none;
+}
+
+/* Respect reduced-motion preferences for collapsible sections. */
+@media (prefers-reduced-motion: reduce) {
+  :is(.services-group, .bookmark-group) [id^="headlessui-disclosure-panel-"] {
+    transform: none !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* Keep mobile information widgets balanced and make the tab bar adaptively scrollable. */
+@media (max-width: 768px) {
+  .information-widget-datetime span {
+    font-size: 0.875rem !important;
+    line-height: 1.25rem !important;
+  }
+
+  /* Align refresh immediately left of the bottom-right Quick Launch button. */
+  #footer {
+    right: 3.75rem !important;
+    bottom: 1rem !important;
+  }
+
+  [role="tablist"] {
+    display: flex !important;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0.25rem;
+    gap: 0.25rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: 0.25rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  [role="tablist"]::-webkit-scrollbar {
+    display: none;
+  }
+
+  :is([role="tab"], button[id^="headlessui-tab"]) {
+    flex: 1 0 max-content;
+    min-width: max-content;
+    white-space: nowrap;
+    text-align: center;
+  }
+}
