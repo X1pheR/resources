@@ -4,6 +4,16 @@ A CSS-only dark neon-glass theme for [Homepage](https://gethomepage.dev/). It ad
 
 Tested with Homepage `v1.13.2`.
 
+## Preview
+
+### Desktop
+
+![Hypershell Neon desktop preview](screenshots/desktop.png)
+
+### Hover glow
+
+![Hypershell Neon hover and glow preview](screenshots/hover-glow.gif)
+
 ## Features
 
 | Feature | What it changes |
