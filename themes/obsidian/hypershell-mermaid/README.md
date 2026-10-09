@@ -14,7 +14,7 @@ A reusable semantic Mermaid stylesheet for Obsidian with a restrained dark palet
 
 ## Example
 
-```mermaid
+```text
 flowchart LR
     Inbox["Inbox"] -->|triage| Projects["Projects"]
     Projects -->|durable knowledge| Knowledge["Knowledge"]
