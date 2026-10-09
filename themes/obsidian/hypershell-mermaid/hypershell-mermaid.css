@@ -1,0 +1,166 @@
+/* Hypershell Mermaid semantic visual system.
+   Color semantics are owned by _meta/operating-models/web-ui/visual/color-system.md.
+   Diagram usage is owned by _meta/operating-models/diagram-visual-standard.md. */
+
+.theme-dark {
+  --hs-mermaid-neutral: #94A3B8;
+  --hs-mermaid-primary: #3C6CFE;
+  --hs-mermaid-secondary: #A855F7;
+  --hs-mermaid-accent: #FF2093;
+  --hs-mermaid-technical: #22D3EE;
+  --hs-mermaid-success: #6EE7A8;
+  --hs-mermaid-warning: #F3C96B;
+  --hs-mermaid-error: #FF8585;
+  --hs-mermaid-edge: #4E5E76;
+  --hs-mermaid-node-surface: #0F172A;
+  --hs-mermaid-chip-bg: #273345;
+  --hs-mermaid-chip-text: #68788F;
+  --hs-mermaid-chip-outline: #4E5E76;
+}
+
+.theme-light {
+  --hs-mermaid-neutral: #64748B;
+  --hs-mermaid-primary: #3157D5;
+  --hs-mermaid-secondary: #7C3AED;
+  --hs-mermaid-accent: #C2186A;
+  --hs-mermaid-technical: #087C8C;
+  --hs-mermaid-success: #167A4A;
+  --hs-mermaid-warning: #8A5A00;
+  --hs-mermaid-error: #C24141;
+  --hs-mermaid-edge: #64748B;
+  --hs-mermaid-node-surface: #FFFFFF;
+  --hs-mermaid-chip-bg: #DDE5EF;
+  --hs-mermaid-chip-text: #0F172A;
+  --hs-mermaid-chip-outline: #A8B5C9;
+}
+
+/* Obsidian/Minimal in dark mode can invert Mermaid SVG rendering as a whole.
+   Computed CSS still reports our intended colors while the pixels are inverted.
+   Disable that global filter only on diagrams using the shared visual system,
+   in both normal Markdown and Mermaid Canvas fullscreen. */
+body.theme-dark :is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid svg.flowchart:has(.node[class*="hs-"]) {
+  filter: none !important;
+}
+
+/* Default/fallback node semantics. */
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node {
+  --hs-node-color: var(--hs-mermaid-neutral);
+}
+
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node.hs-neutral { --hs-node-color: var(--hs-mermaid-neutral); }
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node.hs-primary { --hs-node-color: var(--hs-mermaid-primary); }
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node.hs-secondary { --hs-node-color: var(--hs-mermaid-secondary); }
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node.hs-accent { --hs-node-color: var(--hs-mermaid-accent); }
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node.hs-technical { --hs-node-color: var(--hs-mermaid-technical); }
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node.hs-success { --hs-node-color: var(--hs-mermaid-success); }
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node.hs-warning { --hs-node-color: var(--hs-mermaid-warning); }
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node.hs-error { --hs-node-color: var(--hs-mermaid-error); }
+
+/* Rounded semantic nodes. */
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node rect {
+  fill: color-mix(in srgb, var(--hs-node-color) 15%, var(--hs-mermaid-node-surface)) !important;
+  stroke: var(--hs-node-color) !important;
+  stroke-width: 1.35px !important;
+  rx: 9px !important;
+  ry: 9px !important;
+}
+
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node polygon,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node path {
+  fill: color-mix(in srgb, var(--hs-node-color) 15%, var(--hs-mermaid-node-surface)) !important;
+  stroke: var(--hs-node-color) !important;
+  stroke-width: 1.35px !important;
+}
+
+/* Node labels inherit semantic color while keeping links readable. */
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node .nodeLabel,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node .label,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node foreignObject div,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node a {
+  color: var(--hs-node-color) !important;
+  -webkit-text-fill-color: var(--hs-node-color) !important;
+}
+
+/* Mermaid HTML node labels may be nested in spans and paragraphs. */
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node foreignObject :is(p, span) {
+  color: var(--hs-node-color) !important;
+  -webkit-text-fill-color: var(--hs-node-color) !important;
+}
+
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node text,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .node tspan {
+  fill: var(--hs-node-color) !important;
+}
+
+/* Neutral relationship lines. */
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .flowchart-link,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgePath path {
+  stroke: var(--hs-mermaid-edge) !important;
+  stroke-opacity: 1 !important;
+  stroke-width: 1.35px !important;
+}
+
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid marker path {
+  fill: var(--hs-mermaid-edge) !important;
+  stroke: var(--hs-mermaid-edge) !important;
+}
+
+/* Edge labels in markdown and Mermaid Canvas fullscreen.
+   Do not change measured font-size/width/height or add inner padding:
+   Mermaid already determined the foreignObject geometry before CSS presentation.
+   An outward box-shadow gives visual inset without clipping text or changing routing. */
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel rect {
+  background: transparent !important;
+  fill: transparent !important;
+}
+
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel foreignObject {
+  overflow: visible !important;
+}
+
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel .labelBkg {
+  background: var(--hs-mermaid-chip-bg) !important;
+  border: 1.5px solid var(--hs-mermaid-chip-outline) !important;
+  border-radius: 6px !important;
+  padding-inline: 5px !important;
+  box-shadow: none !important;
+  color: var(--hs-mermaid-chip-text) !important;
+}
+
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel .labelBkg > span,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel .labelBkg p,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel .labelBkg p span {
+  background: transparent !important;
+  border: 0 !important;
+  color: var(--hs-mermaid-chip-text) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: inherit !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: var(--hs-mermaid-chip-text) !important;
+  text-shadow: none !important;
+}
+
+/* Home preview: slightly smaller edge-label text only. */
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel .labelBkg :is(p, span) {
+  font-size: 13px !important;
+}
+
+/* Mermaid renders text in .label, separately from the .labelBkg capsule.
+   Target the HTML text descendants without altering measured layout dimensions. */
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel .label,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel foreignObject,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel foreignObject div,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel foreignObject p,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel foreignObject span {
+  color: var(--hs-mermaid-chip-text) !important;
+  -webkit-text-fill-color: var(--hs-mermaid-chip-text) !important;
+  opacity: 1 !important;
+}
+
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel text,
+:is(.markdown-rendered, .mermaid-canvas-fullscreen) .mermaid .edgeLabel tspan {
+  fill: var(--hs-mermaid-chip-text) !important;
+  opacity: 1 !important;
+}
