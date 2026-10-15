@@ -1,0 +1,24 @@
+name: Verify public SDLC checker distribution
+on:
+  pull_request:
+    paths:
+      - 'scripts/sdlc/**'
+      - '.github/workflows/sdlc-checker-distribution.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/sdlc/**'
+      - '.github/workflows/sdlc-checker-distribution.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Verify pinned source artifact and public consumer
+        run: |
+          cd scripts/sdlc
+          sha256sum -c SHA256SUMS
+          python3 verify-public.py
