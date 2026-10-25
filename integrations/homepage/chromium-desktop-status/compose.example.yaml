@@ -1,0 +1,28 @@
+# Example only: integrate with your existing private desktop stack.
+services:
+  your-desktop:
+    image: lscr.io/linuxserver/webtop:ubuntu-xfce
+    # Configure your browser, loopback CDP and secure desktop separately.
+
+  desktop-homepage-status:
+    image: python:3.12-slim-bookworm
+    network_mode: "service:your-desktop"
+    pid: "service:your-desktop"
+    depends_on:
+      - your-desktop
+    command: ["python", "-B", "/app/server.py"]
+    volumes:
+      - ./server.py:/app/server.py:ro
+    environment:
+      CDP_HTTP_URL: http://127.0.0.1:9222
+      MCP_HTTP_URL: http://127.0.0.1:8933/mcp
+      MCP_HOST_HEADER: your-desktop:8933
+      WATCH_PROCESS: YourApp
+    user: "1000:1000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+    mem_limit: "64m"
+    pids_limit: 32
+    # No host port: never publish telemetry or private CDP.
