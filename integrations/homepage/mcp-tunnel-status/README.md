@@ -1,11 +1,26 @@
-# MCP tunnel status bridge for Homepage
+# Private Homepage Gatus + Docker-health bridge
 
-Small read-only HTTP translator for an existing Gatus monitoring server. It reports HTTP 200 for a fresh successful probe on a configured MCP tunnel and HTTP 503 if failed, missing or stale. The adapter does not perform monitoring, manage Docker, store telemetry or require credentials.
+A small credential-free, read-only adapter for Homepage's status indicators. It uses existing Gatus measurements and a **local, already restricted Docker read proxy**. It adds no probes, database, new public listener or Docker socket mount.
 
-The source in `server.py` is currently pinned to Hypershell's private OCI deployment: bind `10.42.0.129:8197`, local Gatus at `127.0.0.1:3001`, and an explicit client allowlist. It serves three fixed routes, `/general`, `/development`, and `/health`. This pinned source is reusable for other deployments **after** changing the deployment-bound addresses, named endpoints and allowlist. Do not publicly expose the HTTP listener. The systemd unit and deployment lifecycle remain in the infrastructure repository.
+## Supported interfaces
 
-The Homepage consumer uses each private bridge URL as a `siteMonitor`. This gives `Up` (HTTP liveness), **not** Docker `Healthy`. Docker health status requires a separate Docker provider; avoid exposing a Docker API proxy to an additional host without evaluating inspection/secret metadata access.
+- `/general`, `/development`, `/health`: the latest Gatus result for each configured OCI MCP tunnel. A fresh successful sample gives HTTP 200; a failed, absent or stale sample returns 503. Homepage `siteMonitor` presents **Up**.
+- `/containers/json` and Docker API version-prefixed `/vN.N/containers/json`: Dockerode-compatible **minimal allowlisted** container listing for Homepage v2.7.0. Unfiltered list and `filters={"health":["healthy"]}` (also `unhealthy`/`starting`) are supported. Each output item contains only `Id`, `Names`, `State` and an empty `Labels` object. Homepage uses health-filtered lists to present native Docker **Healthy**. No image, mounts, ports, environment, container configuration, log, stats or unrelated container data is returned.
 
-If a secure, least-privilege OCI Docker-health backend replaces this bridge, retire the deployed service and Homepage consumer references together. The Resources source may remain as a reference if still useful; do not keep an unnecessary running service.
+All other paths, Docker operations, methods and unsupported query filters are rejected. The bridge does **not** provide a general Docker API, even though it can serve as a minimal Homepage `docker.yaml` backend. The status indicator's optional stats panel is not supported; use `showStats: false` on its cards.
 
-For source checks, run `python3 -m py_compile server.py`. Expected semantics: fresh success 200, failure/stale/missing 503, disallowed client 403, unknown route 404.
+## Deployment and security
+
+The currently accepted private OCI binding is `10.42.0.129:8197`; Homepage is an allowed client, never the public internet. The service runs under a constrained systemd identity. The existing Docker proxy listens **only on OCI loopback** at `127.0.0.1:2377`; this bridge requests its container listing locally and strips all non-allowlisted container records and metadata before replying.
+
+Environment settings for another installation:
+
+- `HOMEPAGE_STATUS_BIND`, `HOMEPAGE_STATUS_PORT`: private interface and port (Hypershell defaults used by the prior bridge).
+- `HOMEPAGE_GATUS_URL`: local Gatus API base.
+- `HOMEPAGE_STATUS_CLIENTS`: comma-separated allowed source IPv4 addresses.
+- `HOMEPAGE_DOCKER_PROXY`: locally accessible read-only Docker proxy base.
+- `HOMEPAGE_DOCKER_CONTAINERS`: **required for the Docker route**. Comma-separated exact container names; omitted/empty fails closed.
+
+The current route-to-Gatus-name mapping is fixed for the three Hypershell tunnels. Change it deliberately if reusing this integration elsewhere. The OCI systemd unit, container allowlist, source activation and private firewall belong to `X1pheR/hypershell-infrastructure`; reusable implementation and tests belong to `X1pheR/resources`. No new network exposure of the real Docker proxy is permitted.
+
+Run `python3 -m unittest -v test_server.py` and `python3 -m py_compile server.py` for representative security/contract checks. Tests cover read-filter semantics, exact allowlists, metadata suppression, unsupported filters, missing allowlist and supported routes.
