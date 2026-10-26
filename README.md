@@ -14,6 +14,7 @@ Reusable resources such as themes, templates, configuration examples, small util
 | Resource | Description |
 |---|---|
 | [Chromium Desktop Status for Homepage](integrations/homepage/chromium-desktop-status/) | Lightweight read-only Chromium tab, MCP endpoint and process readiness API with configurable source interfaces, Homepage mapping and Compose example. |
+| [Homebox Inventory Summary for Homepage](integrations/homepage/homebox-inventory-summary/) | Private read-only Homebox SQLite aggregate publisher for item, location, tag and warranty counts. |
 
 ## License
 
