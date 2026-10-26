@@ -1,4 +1,4 @@
-# Private Homepage Gatus + Docker-health bridge
+# Homepage Status Bridge
 
 A small credential-free, read-only adapter for Homepage's status indicators. It uses existing Gatus measurements and a **local, already restricted Docker read proxy**. It adds no probes, database, new public listener or Docker socket mount.
 
